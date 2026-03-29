@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Student Registration</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: Arial, sans-serif;
+            background: #f0f2f5;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .card {
+            background: white;
+            padding: 45px;
+            border-radius: 14px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 440px;
+        }
+        .logo {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .logo h1 {
+            font-size: 28px;
+            color: #2c3e50;
+        }
+        .logo p {
+            color: #7f8c8d;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+        .role-badge {
+            background: #3498db;
+            color: white;
+            text-align: center;
+            padding: 8px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: bold;
+            margin-bottom: 25px;
+            letter-spacing: 1px;
+        }
+        label {
+            display: block;
+            font-size: 13px;
+            font-weight: bold;
+            color: #555;
+            margin-bottom: 6px;
+        }
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+            margin-bottom: 18px;
+            transition: border-color 0.2s;
+        }
+        input:focus {
+            border-color: #3498db;
+            outline: none;
+        }
+        button {
+            width: 100%;
+            padding: 13px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        button:hover { background: #2980b9; }
+        .errors {
+            background: #fadbd8;
+            border: 1px solid #e74c3c;
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 18px;
+            font-size: 13px;
+            color: #e74c3c;
+        }
+        .divider {
+            text-align: center;
+            margin: 15px 0;
+            color: #bdc3c7;
+            font-size: 13px;
+        }
+        .links {
+            text-align: center;
+            margin-top: 5px;
+            font-size: 13px;
+            color: #7f8c8d;
+        }
+        .links a {
+            color: #3498db;
+            font-weight: bold;
+            text-decoration: none;
+        }
+        .links a:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <div class="logo">
+        <h1>📚 MyQuiz</h1>
+        <p>Create your student account</p>
+    </div>
+
+    <div class="role-badge">🎓 STUDENT REGISTRATION</div>
+
+    {% if form.errors %}
+    <div class="errors">
+        {% for field in form %}
+            {% for error in field.errors %}
+                ⚠️ {{ error }}<br/>
+            {% endfor %}
+        {% endfor %}
+        {% for error in form.non_field_errors %}
+            ⚠️ {{ error }}<br/>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <form method="POST">
+        {% csrf_token %}
+        <label>Username</label>
+        <input
+            type="text"
+            name="username"
+            placeholder="Enter username"
+            value="{{ form.username.value|default:'' }}"
+            required />
+
+        <label>Email</label>
+        <input
+            type="email"
+            name="email"
+            placeholder="Enter email address"
+            value="{{ form.email.value|default:'' }}" />
+
+        <label>Password</label>
+        <input
+            type="password"
+            name="password1"
+            placeholder="Create a password"
+            required />
+
+        <label>Confirm Password</label>
+        <input
+            type="password"
+            name="password2"
+            placeholder="Confirm your password"
+            required />
+
+        <button type="submit">Register as Student →</button>
+    </form>
+
+    <div class="divider">— or —</div>
+
+    <div class="links">
+        Are you a teacher?
+        <a href="{% url 'register_teacher' %}">Register as Teacher</a>
+        <br/><br/>
+        Already have an account?
+        <a href="{% url 'login' %}">Login here</a>
+    </div>
+</div>
+
+</body>
+</html>

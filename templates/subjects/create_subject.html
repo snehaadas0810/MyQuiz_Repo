@@ -1,0 +1,102 @@
+{% extends 'base.html' %}
+
+{% block title %}Create Subject{% endblock %}
+
+{% block content %}
+
+<style>
+    .container {
+        max-width: 480px;
+        margin: 60px auto;
+        padding: 0 20px;
+    }
+
+    .card {
+        background: white;
+        padding: 40px;
+        border-radius: 14px;
+        box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+    }
+
+    .card-icon {
+        font-size: 40px;
+        margin-bottom: 14px;
+        text-align: center;
+    }
+
+    h2 {
+        font-size: 22px;
+        color: #2c3e50;
+        margin-bottom: 6px;
+        text-align: center;
+    }
+
+    .subtitle {
+        text-align: center;
+        color: #7f8c8d;
+        font-size: 13px;
+        margin-bottom: 28px;
+    }
+
+    input[type="text"] {
+        width: 100%;
+        padding: 12px 14px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        font-size: 15px;
+        margin-bottom: 22px;
+    }
+
+    input[type="text"]:focus {
+        border-color: #27ae60;
+        outline: none;
+    }
+
+    button {
+        width: 100%;
+        padding: 13px;
+        background: #27ae60;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-size: 16px;
+        font-weight: bold;
+        cursor: pointer;
+    }
+
+    button:hover {
+        background: #219a52;
+    }
+
+    .cancel {
+        display: block;
+        text-align: center;
+        margin-top: 15px;
+        color: #7f8c8d;
+        text-decoration: none;
+        font-size: 13px;
+    }
+
+    .cancel:hover {
+        color: #e74c3c;
+    }
+</style>
+
+<div class="container">
+    <div class="card">
+        <div class="card-icon">📖</div>
+
+        <h2>Create New Subject</h2>
+        <p class="subtitle">Add a new subject for your students</p>
+
+        <form method="POST">
+            {% csrf_token %}
+            <input type="text" name="name" placeholder="e.g. Math, Science..." required>
+            <button type="submit">✅ Create Subject</button>
+        </form>
+
+        <a href="{% url 'subject_list' %}" class="cancel">Cancel</a>
+    </div>
+</div>
+
+{% endblock %}

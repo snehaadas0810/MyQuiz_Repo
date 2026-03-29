@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+
+{% block title %}Create Quiz{% endblock %}
+
+{% block content %}
+
+<style>
+    .card {
+        max-width: 500px;
+        margin: 40px auto;
+        background: white;
+        padding: 30px;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    }
+
+    h2 {
+        text-align: center;
+        margin-bottom: 20px;
+        color: #2c3e50;
+    }
+
+    input {
+        width: 100%;
+        padding: 12px;
+        margin-bottom: 15px;
+        border-radius: 8px;
+        border: 1px solid #ddd;
+    }
+
+    button {
+        width: 100%;
+        padding: 12px;
+        background: #9b59b6;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-weight: bold;
+        cursor: pointer;
+    }
+
+    button:hover {
+        background: #8e44ad;
+    }
+
+    .cancel {
+        display: block;
+        text-align: center;
+        margin-top: 10px;
+        color: #7f8c8d;
+        text-decoration: none;
+    }
+</style>
+
+<div class="card">
+    <h2>📝 Create Quiz</h2>
+
+    <form method="POST">
+        {% csrf_token %}
+
+        <input type="text" name="title" placeholder="Quiz Title" required>
+
+        <input type="number" name="time_limit" placeholder="Time for Exam" value="" min="1" required>
+
+        <button type="submit">Create Quiz</button>
+    </form>
+
+    <p style="text-align:center; margin-top:10px;">
+        📖 {{ subject.name }}
+    </p>
+
+    <a href="{% url 'subject_detail' subject.id %}" class="cancel">Cancel</a>
+</div>
+
+{% endblock %}

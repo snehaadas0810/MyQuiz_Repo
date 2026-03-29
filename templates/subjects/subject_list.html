@@ -1,0 +1,124 @@
+{% extends 'base.html' %}
+{% block title %}Subjects{% endblock %}
+{% block content %}
+
+<style>
+    .page-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 30px;
+    }
+    .page-header h1 { font-size: 24px; color: #2c3e50; }
+
+    .btn-add {
+        background: #27ae60;
+        color: white;
+        padding: 11px 22px;
+        border-radius: 8px;
+        text-decoration: none;
+        font-weight: bold;
+        font-size: 14px;
+    }
+
+    .subject-card {
+        background: white;
+        border-radius: 12px;
+        padding: 22px 25px;
+        margin-bottom: 16px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-left: 5px solid #3498db;
+    }
+
+    .subject-left { display: flex; align-items: center; gap: 18px; }
+
+    .subject-icon {
+        width: 50px;
+        height: 50px;
+        background: #eaf4fb;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+    }
+
+    .subject-info h3 { color: #2c3e50; }
+
+    .subject-actions { display: flex; gap: 10px; }
+
+    .btn-action {
+        padding: 8px 16px;
+        border-radius: 7px;
+        text-decoration: none;
+        font-size: 13px;
+        font-weight: bold;
+    }
+
+    .btn-view { background: #eaf4fb; color: #3498db; }
+    .btn-quiz { background: #f5eef8; color: #9b59b6; }
+
+    .btn-delete {
+        background: #fadbd8;
+        color: #e74c3c;
+        border: none;
+        cursor: pointer;
+        padding: 8px 16px;
+        border-radius: 7px;
+        font-size: 13px;
+        font-weight: bold;
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 70px 40px;
+        background: white;
+        border-radius: 14px;
+    }
+</style>
+
+<div class="page-header">
+    <h1>📖 Subjects</h1>
+    <a href="{% url 'create_subject' %}" class="btn-add">➕ Add Subject</a>
+</div>
+
+{% if subjects %}
+    {% for subject in subjects %}
+    <div class="subject-card">
+
+        <!-- ✅ CLICKABLE SUBJECT AREA -->
+        <a href="{% url 'subject_detail' subject.id %}" style="text-decoration:none; color:inherit;">
+            <div class="subject-left">
+                <div class="subject-icon">📖</div>
+                <div class="subject-info">
+                    <h3>{{ subject.name }}</h3>
+                    {% if subject.created_by|default_if_none:'' %}
+                        <p>Created by {{ subject.created_by.username }}</p>
+                    {% endif %}
+                </div>
+            </div>
+        </a>
+
+        <div class="subject-actions">
+            <a href="{% url 'subject_detail' subject.id %}" class="btn-action btn-view">👁 View</a>
+            <a href="{% url 'create_quiz' subject.id %}" class="btn-action btn-quiz">➕ Quiz</a>
+
+            <form method="POST" action="{% url 'delete_subject' subject.id %}">
+                {% csrf_token %}
+                <button type="submit" class="btn-delete">🗑 Delete</button>
+            </form>
+        </div>
+
+    </div>
+    {% endfor %}
+{% else %}
+<div class="empty-state">
+    <h3>No Subjects Yet</h3>
+    <a href="{% url 'create_subject' %}" class="btn-add">Create First Subject</a>
+</div>
+{% endif %}
+
+{% endblock %}

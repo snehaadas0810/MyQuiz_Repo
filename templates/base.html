@@ -1,0 +1,126 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+
+    <!-- ✅ FIXED TITLE -->
+    <title>{% block title %}MyQuiz{% endblock %}</title>
+
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body { font-family: Arial, sans-serif; background: #f0f2f5; }
+
+        /* NAVBAR */
+        .navbar {
+            background: #2c3e50;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 16px;
+        }
+
+        .navbar h2 {
+            color: white;
+            font-size: 20px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: bold;
+            transition: 0.2s;
+        }
+
+        .nav-links a:hover {
+            background: rgba(255,255,255,0.1);
+        }
+
+        .logout {
+            background: #e74c3c;
+        }
+
+        .logout:hover {
+            background: #c0392b;
+        }
+
+        /* CONTAINER */
+        .container {
+            max-width: 1100px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        /* ✅ MESSAGE STYLES */
+        .message {
+            padding: 12px;
+            margin-bottom: 15px;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        .success { background: #d4edda; color: #155724; }
+        .error { background: #f8d7da; color: #721c24; }
+        .warning { background: #fff3cd; color: #856404; }
+    </style>
+
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+    <h2>📚 MyQuiz</h2>
+
+    <div class="nav-links">
+        {% if request.user.is_authenticated %}
+
+            {% if request.user.role == 'teacher' %}
+                <!--<a href="{% url 'subject_list' %}">📖 Subjects</a>
+                <a href="{% url 'manage_students' %}">👨‍🎓 Students</a>-->
+                <a href="{% url 'teacher_dashboard' %}">💻 Dashboard</a>
+                <a href="{% url 'teacher_profile' %}">👨‍🏫 Profile</a>
+                <!--<a href="{% url 'all_results' %}">📊 Results</a>-->
+            {% endif %}
+
+            <a href="{% url 'logout' %}" class="logout">Logout</a>
+
+        {% else %}
+            <a href="{% url 'login' %}">Login</a>
+        {% endif %}
+    </div>
+</nav>
+
+<!-- CONTENT -->
+<div class="container">
+
+    <!-- ✅ SHOW DJANGO MESSAGES -->
+    {% if messages %}
+        {% for message in messages %}
+            <div class="message 
+                {% if message.tags == 'success' %}success{% endif %}
+                {% if message.tags == 'error' %}error{% endif %}
+                {% if message.tags == 'warning' %}warning{% endif %}
+            ">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    {% block content %}
+    {% endblock %}
+
+</div>
+
+</body>
+</html>

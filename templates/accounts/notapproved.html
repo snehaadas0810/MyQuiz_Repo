@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Account Not Approved</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: Arial, sans-serif;
+            background: #f0f2f5;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .card {
+            background: white;
+            padding: 50px 45px;
+            border-radius: 14px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 440px;
+            text-align: center;
+        }
+        .icon { font-size: 64px; margin-bottom: 20px; }
+        h1 { font-size: 24px; color: #e74c3c; margin-bottom: 12px; }
+        p {
+            color: #7f8c8d;
+            font-size: 15px;
+            line-height: 1.6;
+            margin-bottom: 10px;
+        }
+        .status-badge {
+            display: inline-block;
+            background: #fadbd8;
+            border: 1px solid #e74c3c;
+            color: #e74c3c;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: bold;
+            margin: 15px 0 25px;
+            letter-spacing: 1px;
+        }
+        .info-box {
+            background: #fef9e7;
+            border: 1px solid #f39c12;
+            border-radius: 10px;
+            padding: 18px;
+            margin: 20px 0;
+            font-size: 13px;
+            color: #7f8c8d;
+            line-height: 1.6;
+        }
+        .btn {
+            display: inline-block;
+            padding: 12px 30px;
+            background: #3498db;
+            color: white;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+        .btn:hover { background: #2980b9; }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <div class="icon">🚫</div>
+    <h1>Account Not Approved</h1>
+    <p>Your account is still waiting for teacher approval before you can login.</p>
+
+    <div class="info-box">
+        💡 Please contact your teacher and ask them to approve your account.
+        Once approved you will be able to login normally.
+    </div>
+
+    <a href="{% url 'login' %}" class="btn">← Back to Login</a>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,126 @@
+{% extends 'base.html' %}
+
+{% block title %}Manage Students{% endblock %}
+
+{% block content %}
+
+<style>
+    .card {
+        background: white;
+        padding: 25px;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    }
+
+    h2 {
+        margin-bottom: 20px;
+        color: #2c3e50;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    th {
+        background: #2c3e50;
+        color: white;
+        padding: 12px;
+        text-align: left;
+        font-size: 14px;
+    }
+
+    td {
+        padding: 12px;
+        border-bottom: 1px solid #eee;
+        font-size: 14px;
+    }
+
+    tr:hover {
+        background: #f9f9f9;
+    }
+
+    .status-approved {
+        color: #27ae60;
+        font-weight: bold;
+    }
+
+    .status-pending {
+        color: #e67e22;
+        font-weight: bold;
+    }
+
+    .btn-approve {
+        background: #27ae60;
+        color: white;
+        padding: 6px 14px;
+        border-radius: 6px;
+        text-decoration: none;
+        font-size: 13px;
+        font-weight: bold;
+        transition: 0.2s;
+    }
+
+    .btn-approve:hover {
+        background: #219a52;
+    }
+
+    .check {
+        color: #27ae60;
+        font-size: 16px;
+    }
+
+    .empty {
+        text-align: center;
+        padding: 30px;
+        color: #7f8c8d;
+    }
+</style>
+
+<div class="card">
+
+    <h2>👨‍🎓 Student Management</h2>
+
+    {% if students %}
+    <table>
+        <tr>
+            <th>Username</th>
+            <th>Status</th>
+            <th>Action</th>
+        </tr>
+
+        {% for student in students %}
+        <tr>
+            <td>{{ student.username }}</td>
+
+            <td>
+                {% if student.is_approved %}
+                    <span class="status-approved">✅ Approved</span>
+                {% else %}
+                    <span class="status-pending">⏳ Pending</span>
+                {% endif %}
+            </td>
+
+            <td>
+                {% if not student.is_approved %}
+                    <a href="{% url 'approve_student' student.id %}" class="btn-approve">
+                        Approve
+                    </a>
+                {% else %}
+                    <span class="check">✔</span>
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+
+    </table>
+
+    {% else %}
+        <div class="empty">
+            🚫 No students found
+        </div>
+    {% endif %}
+
+</div>
+
+{% endblock %}

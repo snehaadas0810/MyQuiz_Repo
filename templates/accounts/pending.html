@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Registration Pending</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: Arial, sans-serif;
+            background: #f0f2f5;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .card {
+            background: white;
+            padding: 50px 45px;
+            border-radius: 14px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 440px;
+            text-align: center;
+        }
+        .icon { font-size: 64px; margin-bottom: 20px; }
+        h1 {
+            font-size: 24px;
+            color: #2c3e50;
+            margin-bottom: 12px;
+        }
+        p {
+            color: #7f8c8d;
+            font-size: 15px;
+            line-height: 1.6;
+            margin-bottom: 10px;
+        }
+
+        /* ✅ ONLY this badge stays — no ACCESS DENIED here */
+        .status-badge {
+            display: inline-block;
+            background: #fef9e7;
+            border: 1px solid #f39c12;
+            color: #f39c12;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: bold;
+            margin: 15px 0 25px;
+            letter-spacing: 1px;
+        }
+        .steps {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: left;
+        }
+        .steps p {
+            font-size: 13px;
+            color: #555;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .steps p:last-child { margin-bottom: 0; }
+        .btn {
+            display: inline-block;
+            padding: 12px 30px;
+            background: #3498db;
+            color: white;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        .btn:hover { background: #2980b9; }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <div class="icon">⏳</div>
+    <h1>Registration Submitted!</h1>
+
+    
+    <div class="status-badge">⏸ PENDING APPROVAL</div>
+
+    <p>Your account has been created successfully and is
+       now waiting for teacher approval.</p>
+
+    <div class="steps">
+        <p>✅ Step 1: Registration completed</p>
+        <p>⏳ Step 2: Waiting for teacher approval</p>
+        <p>🔒 Step 3: Login after approval</p>
+    </div>
+
+    <p>You will be able to login once a teacher approves
+       your account.</p>
+    <br/>
+    <a href="{% url 'login' %}" class="btn">Go to Login →</a>
+</div>
+
+<!--------------------------New code added now----------------------------------------------------->
+<!-- 📋 STUDENT TABLE -->
+<div class="card p-3 shadow-sm">
+
+    <table class="table table-hover align-middle">
+        <thead class="table-dark">
+            <tr>
+                <th>Username</th>
+                <th>Email</th>
+                <th>Status</th>
+                <th width="200">Action</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for s in students %}
+            <tr>
+                <td><strong>{{ s.username }}</strong></td>
+                <td>{{ s.email }}</td>
+
+                <!-- STATUS -->
+                <td>
+                    {% if s.is_approved %}
+                        <span class="badge bg-success">Approved</span>
+                    {% else %}
+                        <span class="badge bg-warning text-dark">Pending</span>
+                    {% endif %}
+                </td>
+
+                <!-- ACTION -->
+                <td>
+                    {% if not s.is_approved %}
+                        <a href="{% url 'approve_student' s.id %}"
+                           class="btn btn-success btn-sm">
+                           ✔ Approve
+                        </a>
+                    {% else %}
+                        <span class="text-muted">✔ Already Approved</span>
+                    {% endif %}
+                </td>
+            </tr>
+            </tbody>
+
+    </table>
+
+</div>
+<!---------------------------------------Ends here--------------------------------------------------->
+
+</body>
+</html>

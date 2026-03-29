@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Already Attempted</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: Arial, sans-serif;
+            background: #f0f2f5;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .card {
+            background: white;
+            padding: 50px 45px;
+            border-radius: 14px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 480px;
+            text-align: center;
+        }
+        .icon { font-size: 64px; margin-bottom: 20px; }
+        h1 { font-size: 24px; color: #2c3e50; margin-bottom: 10px; }
+        p { color: #7f8c8d; font-size: 15px; line-height: 1.6; }
+
+        /* Score box */
+        .score-box {
+            margin: 25px 0;
+            padding: 20px;
+            border-radius: 12px;
+            background: #f8f9fa;
+        }
+        .score-box p { font-size: 14px; color: #7f8c8d; margin-bottom: 8px; }
+        .score-number {
+            font-size: 42px;
+            font-weight: bold;
+        }
+        .score-pass { color: #27ae60; }
+        .score-fail { color: #e74c3c; }
+        .score-label { font-size: 14px; color: #7f8c8d; margin-top: 4px; }
+
+        /* Info box */
+        .info-box {
+            border-radius: 10px;
+            padding: 16px 20px;
+            margin: 20px 0;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+        .info-pass {
+            background: #eafaf1;
+            border: 1px solid #27ae60;
+            color: #27ae60;
+        }
+        .info-fail {
+            background: #fef9e7;
+            border: 1px solid #f39c12;
+            color: #e67e22;
+        }
+
+        /* Buttons */
+        .btn-row {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            margin-top: 25px;
+            flex-wrap: wrap;
+        }
+        .btn {
+            padding: 12px 26px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 14px;
+            transition: opacity 0.2s;
+        }
+        .btn:hover { opacity: 0.85; }
+        .btn-home { background: #3498db; color: white; }
+        .btn-retake { background: #e67e22; color: white; }
+        .btn-disabled {
+            background: #ecf0f1;
+            color: #bdc3c7;
+            cursor: not-allowed;
+            padding: 12px 26px;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .date-text {
+            font-size: 12px;
+            color: #bdc3c7;
+            margin-top: 8px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="card">
+
+    {% if can_retake %}
+        <!-- Score is less than 8 — can retake -->
+        <div class="icon">😔</div>
+        <h1>Quiz Already Attempted</h1>
+        <p>You have taken this quiz before but scored below 8. You can retake it!</p>
+
+        <div class="score-box">
+            <p>Your previous score</p>
+            <div class="score-number score-fail">
+                {{ result.score }} / {{ result.total_questions }}
+            </div>
+            <div class="score-label">Below passing score of 8</div>
+            <div class="date-text">
+                Attempted on {{ result.date_taken|date:"d M Y, H:i" }}
+            </div>
+        </div>
+
+        <div class="info-box info-fail">
+            ⚠️ You scored less than 8. You are allowed to retake
+            this quiz one more time. Your previous attempt will
+            be replaced with your new score.
+        </div>
+
+        <div class="btn-row">
+            <a href="{% url 'student_dashboard' %}" class="btn btn-home">
+                🏠 Dashboard
+            </a>
+            <a href="{% url 'retake_quiz' quiz.id %}" class="btn btn-retake">
+                🔄 Retake Quiz
+            </a>
+        </div>
+
+    {% else %}
+        <!-- Score is 8 or more — cannot retake -->
+        <div class="icon">🏆</div>
+        <h1>Already Completed!</h1>
+        <p>You have already passed this quiz successfully.</p>
+
+        <div class="score-box">
+            <p>Your score</p>
+            <div class="score-number score-pass">
+                {{ result.score }} / {{ result.total_questions }}
+            </div>
+            <div class="score-label">Passed ✅</div>
+            <div class="date-text">
+                Attempted on {{ result.date_taken|date:"d M Y, H:i" }}
+            </div>
+        </div>
+
+        <div class="info-box info-pass">
+            ✅ You scored 8 or above on this quiz. 
+            You cannot retake a quiz you have already passed.
+        </div>
+
+        <div class="btn-row">
+            <a href="{% url 'student_dashboard' %}" class="btn btn-home">
+                🏠 Dashboard
+            </a>
+            <span class="btn-disabled">🔒 Retake Locked</span>
+        </div>
+
+    {% endif %}
+
+</div>
+
+</body>
+</html>

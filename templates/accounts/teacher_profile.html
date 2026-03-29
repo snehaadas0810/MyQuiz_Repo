@@ -1,0 +1,115 @@
+{% extends 'base.html' %}
+
+{% block page_title %}Teacher Profile{% endblock %}
+
+{% block content %}
+
+<style>
+    /* Reuse these from your Dashboard/Login for consistency */
+    .profile-card {
+        background: white;
+        border-radius: 12px;
+        padding: 30px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+        margin-bottom: 25px;
+    }
+    .profile-header {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        margin-bottom: 20px;
+        border-bottom: 1px solid #f0f2f5;
+        padding-bottom: 15px;
+    }
+    .profile-header h2 { color: #2c3e50; font-size: 20px; }
+    
+    .info-group { margin-bottom: 15px; }
+    .info-label { font-size: 13px; color: #7f8c8d; font-weight: bold; text-transform: uppercase; display: block; }
+    .info-value { font-size: 16px; color: #2c3e50; margin-top: 4px; display: block; }
+
+    /* Form Elements */
+    .form-section-title { font-size: 16px; font-weight: bold; color: #2c3e50; margin-bottom: 15px; display: flex; align-items: center; gap: 8px; }
+    .form-control {
+        width: 100%;
+        padding: 10px 15px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        margin-bottom: 15px;
+        font-size: 14px;
+    }
+    .btn-update {
+        background: #3498db;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 6px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: background 0.2s;
+    }
+    .btn-update:hover { background: #2980b9; }
+
+    .grid-layout {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 25px;
+    }
+
+    @media (max-width: 768px) {
+        .grid-layout { grid-template-columns: 1fr; }
+    }
+</style>
+
+<div class="container">
+    <!-- Row 1: Basic Info -->
+    <div class="profile-card">
+        <div class="profile-header">
+            <span style="font-size: 30px;">👤</span>
+            <h2>My Profile Details</h2>
+        </div>
+        <div style="display: flex; gap: 40px; flex-wrap: wrap;">
+            <div class="info-group">
+                <span class="info-label">Username</span>
+                <span class="info-value">{{ user.username }}</span>
+            </div>
+            <div class="info-group">
+                <span class="info-label">Email Address</span>
+                <span class="info-value">{{ user.email }}</span>
+            </div>
+            <div class="info-group">
+                <span class="info-label">Account Status</span>
+                <span class="info-value" style="color: #27ae60; font-weight: bold;">✓ Teacher</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Row 2: Forms -->
+    <div class="grid-layout">
+        <!-- Update Email Form -->
+        <div class="profile-card">
+            <h3 class="form-section-title">📝 Update Email</h3>
+            <form method="POST" action="{% url 'update_email' %}">
+                {% csrf_token %}
+                <label class="info-label">New Email Address</label>
+                <input type="email" name="email" class="form-control" value="{{ user.email }}" required>
+                <button type="submit" class="btn-update">Update Email</button>
+            </form>
+        </div>
+
+        <!-- Change Password Form -->
+        <div class="profile-card">
+            <h3 class="form-section-title">🔒 Change Password</h3>
+            <form method="POST" action="{% url 'change_password' %}">
+                {% csrf_token %}
+                <input type="password" name="old_password" class="form-control" placeholder="Old Password" required>
+                <input type="password" name="new_password" class="form-control" placeholder="New Password" required>
+                <input type="password" name="confirm_password" class="form-control" placeholder="Confirm New Password" required>
+                <button type="submit" class="btn-update" style="background: #2c3e50;">Change Password</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
+{% endblock %} 

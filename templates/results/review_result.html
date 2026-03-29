@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Review Result</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: Arial, sans-serif; background: #f0f2f5; }
+        .navbar {
+            background: #2c3e50;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .navbar h2 { color: white; }
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            background: #3498db;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 13px;
+        }
+        .container { max-width: 800px; margin: 40px auto; padding: 0 20px 60px; }
+
+        /* Student info bar */
+        .student-bar {
+            background: white;
+            border-radius: 12px;
+            padding: 20px 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .student-bar h2 { font-size: 18px; color: #2c3e50; }
+        .student-bar p  { font-size: 13px; color: #7f8c8d; margin-top: 4px; }
+        .pending-badge {
+            background: #fef9e7;
+            border: 1px solid #f39c12;
+            color: #e67e22;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        /* Answer cards */
+        .answer-card {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 18px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+        }
+        .answer-card.mcq-card  { border-left: 5px solid #9b59b6; }
+        .answer-card.desc-card { border-left: 5px solid #3498db; }
+
+        .q-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        .q-num {
+            font-size: 11px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .mcq-card  .q-num { color: #9b59b6; }
+        .desc-card .q-num { color: #3498db; }
+
+        .type-badge {
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: bold;
+        }
+        .badge-mcq  { background: #f5eef8; color: #9b59b6; }
+        .badge-desc { background: #eaf4fb; color: #3498db; }
+
+        .q-text {
+            font-size: 16px;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 14px;
+        }
+
+        /* MCQ result display */
+        .mcq-result {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 12px 16px;
+            font-size: 13px;
+            color: #555;
+        }
+        .correct-ans { color: #27ae60; font-weight: bold; }
+        .wrong-ans   { color: #e74c3c; font-weight: bold; }
+
+        /* Student written answer */
+        .written-answer {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 14px 16px;
+            font-size: 14px;
+            color: #2c3e50;
+            line-height: 1.7;
+            margin-bottom: 14px;
+        }
+
+        /* Model answer */
+        .model-answer {
+            background: #eafaf1;
+            border: 1px solid #27ae60;
+            border-radius: 8px;
+            padding: 14px 16px;
+            font-size: 13px;
+            color: #27ae60;
+            line-height: 1.7;
+            margin-bottom: 16px;
+        }
+        .model-answer strong { display: block; margin-bottom: 5px; }
+
+        /* Marks input */
+        .marks-section { margin-top: 14px; }
+        .marks-section label {
+            display: block;
+            font-size: 13px;
+            font-weight: bold;
+            color: #555;
+            margin-bottom: 6px;
+        }
+        .marks-input-row {
+            display: grid;
+            grid-template-columns: 120px 1fr;
+            gap: 14px;
+            align-items: start;
+        }
+        input[type="number"],
+        textarea {
+            padding: 10px 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: Arial, sans-serif;
+            width: 100%;
+        }
+        input[type="number"]:focus,
+        textarea:focus {
+            border-color: #3498db;
+            outline: none;
+        }
+        textarea { min-height: 70px; resize: vertical; }
+
+        .max-marks {
+            font-size: 12px;
+            color: #7f8c8d;
+            margin-top: 4px;
+        }
+
+        /* Submit */
+        .submit-bar {
+            background: white;
+            border-radius: 12px;
+            padding: 20px 25px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .submit-bar p { color: #7f8c8d; font-size: 14px; }
+        .btn-submit {
+            background: #27ae60;
+            color: white;
+            border: none;
+            padding: 13px 35px;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .btn-submit:hover { background: #219a52; }
+    </style>
+</head>
+<body>
+
+<nav class="navbar">
+    <h2>📊 Review Student Answers</h2>
+    <a href="{% url 'all_results' %}">← Back to Results</a>
+</nav>
+
+<div class="container">
+
+    <!-- Student Info Bar -->
+    <div class="student-bar">
+        <div>
+            <h2>🎓 {{ result.student.username }}</h2>
+            <p>
+                Quiz: {{ result.quiz.title }} &nbsp;|&nbsp;
+                Subject: {{ result.quiz.subject.name }} &nbsp;|&nbsp;
+                Date: {{ result.date_taken|date:"d M Y, H:i" }}
+            </p>
+        </div>
+        <div class="pending-badge">⏳ Pending Review</div>
+    </div>
+
+    <form method="POST">
+        {% csrf_token %}
+
+        {% for answer in answers %}
+
+        <!-- MCQ Answer -->
+        {% if answer.question.question_type == 'mcq' %}
+        <div class="answer-card mcq-card">
+            <div class="q-header">
+                <span class="q-num">Question {{ forloop.counter }}</span>
+                <span class="type-badge badge-mcq">🔘 MCQ</span>
+            </div>
+            <div class="q-text">{{ answer.question.question_text }}</div>
+            <div class="mcq-result">
+                {% if answer.is_correct %}
+                    <span class="correct-ans">
+                        ✅ Answered: {{ answer.selected_answer }} — Correct
+                        ({{ answer.marks_awarded }} mark(s))
+                    </span>
+                {% else %}
+                    <span class="wrong-ans">
+                        ❌ Answered: {{ answer.selected_answer }} — Wrong
+                        (0 marks)
+                    </span>
+                    <br/>
+                    <span class="correct-ans">
+                        ✅ Correct: {{ answer.question.correct_answer }}
+                    </span>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Descriptive Answer -->
+        {% else %}
+        <div class="answer-card desc-card">
+            <div class="q-header">
+                <span class="q-num">Question {{ forloop.counter }}</span>
+                <span class="type-badge badge-desc">✍️ Descriptive</span>
+            </div>
+            <div class="q-text">{{ answer.question.question_text }}</div>
+
+            <!-- Student answer -->
+            <label style="font-size:13px; font-weight:bold; color:#555; margin-bottom:6px; display:block;">
+                📝 Student's Answer:
+            </label>
+            <div class="written-answer">
+                {% if answer.descriptive_answer %}
+                    {{ answer.descriptive_answer }}
+                {% else %}
+                    <em style="color:#bdc3c7;">No answer provided</em>
+                {% endif %}
+            </div>
+
+            <!-- Model answer -->
+            {% if answer.question.correct_answer %}
+            <div class="model-answer">
+                <strong>📋 Model Answer (only visible to you):</strong>
+                {{ answer.question.correct_answer }}
+            </div>
+            {% endif %}
+
+            <!-- Award marks -->
+            <div class="marks-section">
+                <div class="marks-input-row">
+                    <div>
+                        <label>Marks Awarded</label>
+                        <input type="number"
+                               name="marks_{{ answer.id }}"
+                               min="0"
+                               max="{{ answer.question.marks }}"
+                               value="0"
+                               required />
+                        <div class="max-marks">
+                            Max: {{ answer.question.marks }} mark(s)
+                        </div>
+                    </div>
+                    <div>
+                        <label>Feedback for Student (optional)</label>
+                        <textarea name="feedback_{{ answer.id }}"
+                                  placeholder="e.g. Good answer but missing key points...">
+                        </textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+        {% endfor %}
+
+        <!-- Submit Review -->
+        <div class="submit-bar">
+            <p>
+                ✅ Review all descriptive answers and
+                award marks before submitting.
+            </p>
+            <button type="submit" class="btn-submit">
+                ✅ Submit Review & Update Score
+            </button>
+        </div>
+
+    </form>
+</div>
+
+</body>
+</html>

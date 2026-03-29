@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Teacher Registration</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: Arial, sans-serif;
+            background: #f0f2f5;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .card {
+            background: white;
+            padding: 45px;
+            border-radius: 14px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 440px;
+        }
+        .logo {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .logo h1 {
+            font-size: 28px;
+            color: #2c3e50;
+        }
+        .logo p {
+            color: #7f8c8d;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+        .role-badge {
+            background: #2c3e50;
+            color: white;
+            text-align: center;
+            padding: 8px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: bold;
+            margin-bottom: 25px;
+            letter-spacing: 1px;
+        }
+        label {
+            display: block;
+            font-size: 13px;
+            font-weight: bold;
+            color: #555;
+            margin-bottom: 6px;
+        }
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+            margin-bottom: 18px;
+            transition: border-color 0.2s;
+        }
+        input:focus {
+            border-color: #2c3e50;
+            outline: none;
+        }
+        button {
+            width: 100%;
+            padding: 13px;
+            background: #2c3e50;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        button:hover { background: #1a252f; }
+        .errors {
+            background: #fadbd8;
+            border: 1px solid #e74c3c;
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 18px;
+            font-size: 13px;
+            color: #e74c3c;
+        }
+        .links {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 13px;
+            color: #7f8c8d;
+        }
+        .links a { color: #2c3e50; font-weight: bold; text-decoration: none; }
+        .links a:hover { text-decoration: underline; }
+        .divider {
+            text-align: center;
+            margin: 15px 0;
+            color: #bdc3c7;
+            font-size: 13px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <div class="logo">
+        <h1>📚 MyQuiz</h1>
+        <p>Create your teacher account</p>
+    </div>
+
+    <div class="role-badge">👨‍🏫 TEACHER REGISTRATION</div>
+
+    {% if form.errors %}
+    <div class="errors">
+        {% for field in form %}
+            {% for error in field.errors %}
+                ⚠️ {{ error }}<br/>
+            {% endfor %}
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <form method="POST">
+        {% csrf_token %}
+        <label>Username</label>
+        <input type="text" name="username" placeholder="Enter username" required />
+
+        <label>Email</label>
+        <input type="email" name="email" placeholder="Enter email address" />
+
+        <label>Password</label>
+        <input type="password" name="password1" placeholder="Create a password" required />
+
+        <label>Confirm Password</label>
+        <input type="password" name="password2" placeholder="Confirm your password" required />
+
+        <button type="submit">Register as Teacher →</button>
+    </form>
+
+    <div class="divider">— or —</div>
+
+    <div class="links">
+        Are you a student?
+        <a href="{% url 'register' %}">Register as Student</a>
+        <br/><br/>
+        Already have an account?
+        <a href="{% url 'login' %}">Login here</a>
+    </div>
+</div>
+
+</body>
+</html>

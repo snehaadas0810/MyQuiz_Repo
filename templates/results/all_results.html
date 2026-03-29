@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>All Results</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: Arial, sans-serif; background: #f0f2f5; }
+        .navbar {
+            background: #2c3e50;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: bold;
+            font-size: 16px;
+        }
+        .navbar h2 { color: white; }
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 5px;
+            margin-left: 8px;
+            font-weight: bold;
+            font-size: 16px;
+        }
+        /* Fixed Logout Button Styling */
+        .navbar a.logout {
+            background: #e74c3c; /* Consistent Red */
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        .navbar a.logout:hover {
+            background: #c0392b; /* Slightly darker on hover */
+        }
+        .container { max-width: 1000px; margin: 40px auto; padding: 0 20px; }
+        h1 { color: #2c3e50; margin-bottom: 25px; }
+        table {
+            width: 100%;
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+            border-collapse: collapse;
+        }
+        thead { background: #2c3e50; color: white; }
+        th { padding: 15px 20px; text-align: left; font-size: 14px; }
+        td { padding: 14px 20px; border-bottom: 1px solid #ecf0f1; font-size: 14px; color: #2c3e50; }
+        tr:last-child td { border-bottom: none; }
+        tr:hover td { background: #f8f9fa; }
+        .score-badge {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 13px;
+        }
+        .score-high { background: #d5f5e3; color: #27ae60; }
+        .score-low { background: #fadbd8; color: #e74c3c; }
+        .no-results {
+            text-align: center;
+            padding: 60px;
+            color: #7f8c8d;
+            background: white;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<nav class="navbar">
+    <h2>📊 All Results</h2>
+    <div>
+        <a href="{% url 'teacher_dashboard' %}">💻 Dashboard</a>
+        <a href="{% url 'teacher_profile' %}">👨‍🏫 Profile</a>
+        <a href="{% url 'logout' %}" class="logout">Logout</a>
+    </div>
+</nav>
+
+<div class="container">
+    <h1>📋 Student Results</h1>
+
+    {% if results %}
+    <table>
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Student</th>
+                <th>Quiz</th>
+                <th>Subject</th>
+                <th>Score</th>
+                <th>Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for result in results %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ result.student.username }}</td>
+                <td>{{ result.quiz.title }}</td>
+                <td>{{ result.quiz.subject.name }}</td>
+                <td>
+                    <span class="score-badge {% if result.score >= result.total_questions|divisibleby:2 %}score-high{% else %}score-low{% endif %}">
+                        {{ result.score }} / {{ result.total_questions }}
+                    </span>
+                </td>
+                <td>{{ result.date_taken|date:"d M Y, H:i" }}</td>
+                    <td>
+                        {% if not result.is_reviewed %}
+                            <a href="{% url 'review_result' result.id %}"
+                            style="background:#e67e22; color:white; padding:5px 12px;
+                                    border-radius:6px; text-decoration:none;
+                                    font-size:12px; font-weight:bold;">
+                                ⏳ Review
+                            </a>
+                        {% else %}
+                            <span style="background:#eafaf1; color:#27ae60; padding:5px 12px;
+                                        border-radius:6px; font-size:12px; font-weight:bold;">
+                                ✅ Reviewed
+                            </span>
+                        {% endif %}
+                    </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <div class="no-results">
+        <h3>No results yet.</h3>
+        <p>Results will appear here once students start taking quizzes.</p>
+    </div>
+    {% endif %}
+</div>
+
+</body>
+</html>

@@ -1,0 +1,48 @@
+{% extends 'base_student.html' %}
+
+{% block title %}My Results{% endblock %}
+
+{% block content %}
+
+<style>
+.card {
+    background: white;
+    padding: 20px;
+    margin-bottom: 15px;
+    border-radius: 10px;
+}
+
+.pass { color: green; font-weight: bold; }
+.fail { color: red; font-weight: bold; }
+.pending { color: orange; font-weight: bold; }
+</style>
+
+<h2>📊 My Results</h2>
+
+{% for r in results %}
+<div class="card">
+
+    <h3>{{ r.quiz.title }}</h3>
+
+    <p>Score: {{ r.score }}</p>
+    <p>Total Questions: {{ r.total_questions }}</p>
+
+    <p>
+        Status:
+        {% if r.is_pending_review %}
+            <span class="pending">⏳ Pending Review</span>
+        {% elif r.score >= 5 %}
+            <span class="pass">✅ Pass</span>
+        {% else %}
+            <span class="fail">❌ Fail</span>
+        {% endif %}
+    </p>
+
+    <p>Date: {{ r.date_taken }}</p>
+
+</div>
+{% empty %}
+<p>No results yet.</p>
+{% endfor %}
+
+{% endblock %}

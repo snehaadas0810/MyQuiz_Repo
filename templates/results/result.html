@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Quiz Result</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: Arial, sans-serif; background: #f0f2f5; }
+        .navbar {
+            background: #2c3e50;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .navbar h2 { color: white; }
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            background: #3498db;
+            padding: 8px 16px;
+            border-radius: 5px;
+        }
+        .container {
+            max-width: 750px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        /* Score card */
+        .score-card {
+            background: white;
+            border-radius: 14px;
+            padding: 40px;
+            text-align: center;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+        }
+        .score-circle {
+            width: 130px; height: 130px;
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+            font-weight: bold;
+            color: white;
+        }
+        .score-pass { background: linear-gradient(135deg,#27ae60,#2ecc71); }
+        .score-fail { background: linear-gradient(135deg,#e74c3c,#c0392b); }
+        .score-card h1 { color: #2c3e50; margin-bottom: 8px; }
+        .score-card p  { color: #7f8c8d; font-size: 15px; }
+
+        /* ✅ Pending review notice */
+        .pending-notice {
+            background: #fef9e7;
+            border: 1px solid #f39c12;
+            border-radius: 10px;
+            padding: 18px 22px;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+        }
+        .pending-notice .notice-icon { font-size: 28px; }
+        .pending-notice h4 { color: #e67e22; margin-bottom: 5px; }
+        .pending-notice p  { color: #7f8c8d; font-size: 13px; line-height: 1.6; }
+
+        /* Answer cards */
+        .section-title {
+            font-size: 18px;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+        .answer-card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 14px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        }
+        .answer-card.correct  { border-left: 5px solid #27ae60; }
+        .answer-card.wrong    { border-left: 5px solid #e74c3c; }
+        .answer-card.pending  { border-left: 5px solid #f39c12; }
+
+        .q-type-badge {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .badge-mcq  { background: #f5eef8; color: #9b59b6; }
+        .badge-desc { background: #eaf4fb; color: #3498db; }
+
+        .question-text {
+            font-size: 15px;
+            color: #2c3e50;
+            margin-bottom: 12px;
+            font-weight: bold;
+        }
+        .answer-row {
+            font-size: 14px;
+            padding: 8px 12px;
+            border-radius: 6px;
+            margin-bottom: 6px;
+        }
+        .answer-correct { background: #d5f5e3; color: #27ae60; font-weight: bold; }
+        .answer-wrong   { background: #fadbd8; color: #e74c3c; font-weight: bold; }
+        .answer-pending {
+            background: #fef9e7;
+            color: #e67e22;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+        .written-answer {
+            background: #f8f9fa;
+            border-radius: 6px;
+            padding: 12px 14px;
+            font-size: 14px;
+            color: #2c3e50;
+            line-height: 1.6;
+            margin-bottom: 8px;
+        }
+
+        .btn-home {
+            display: inline-block;
+            margin-top: 20px;
+            background: #3498db;
+            color: white;
+            padding: 12px 30px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<nav class="navbar">
+    <h2>📊 Quiz Result</h2>
+    <a href="{% url 'student_dashboard' %}">← Dashboard</a>
+</nav>
+
+<div class="container">
+
+    <!-- Score Summary -->
+    <div class="score-card">
+        <div class="score-circle
+            {% if score >= 8 %}score-pass{% else %}score-fail{% endif %}">
+            {{ score }}/{{ total }}
+        </div>
+        <h1>
+            {% if has_descriptive %}
+                ⏳ Partial Result
+            {% elif score >= 8 %}
+                🎉 Well Done!
+            {% else %}
+                😔 Better Luck Next Time
+            {% endif %}
+        </h1>
+        <p>
+            MCQ Score: <strong>{{ score }}</strong> out of
+            <strong>{{ total }}</strong> questions.
+            {% if has_descriptive %}
+                <br/>Descriptive answers are pending teacher review.
+            {% endif %}
+        </p>
+        <a href="{% url 'student_dashboard' %}" class="btn-home">
+            Back to Dashboard
+        </a>
+    </div>
+
+    <!-- ✅ Pending Review Notice -->
+    {% if has_descriptive %}
+    <div class="pending-notice">
+        <div class="notice-icon">⏳</div>
+        <div>
+            <h4>Descriptive Answers Pending Review</h4>
+            <p>
+                Your written answers have been submitted and are waiting
+                for your teacher to review and award marks. Your final
+                score will be updated once the teacher completes the review.
+            </p>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Answer Review -->
+    <div class="section-title">📋 Answer Review</div>
+
+    {% for item in answer_results %}
+    <div class="answer-card
+        {% if item.type == 'mcq' %}
+            {% if item.is_correct %}correct{% else %}wrong{% endif %}
+        {% else %}
+            pending
+        {% endif %}">
+
+        <!-- Question type badge -->
+        {% if item.type == 'mcq' %}
+            <span class="q-type-badge badge-mcq">🔘 MCQ</span>
+        {% else %}
+            <span class="q-type-badge badge-desc">✍️ Descriptive</span>
+        {% endif %}
+
+        <div class="question-text">
+            Q{{ forloop.counter }}. {{ item.question.question_text }}
+        </div>
+
+        {% if item.type == 'mcq' %}
+            <!-- MCQ result -->
+            {% if item.is_correct %}
+                <div class="answer-row answer-correct">
+                    ✅ Your Answer: {{ item.selected }} — Correct!
+                </div>
+            {% else %}
+                <div class="answer-row answer-wrong">
+                    ❌ Your Answer: {{ item.selected }} — Wrong
+                </div>
+                <div class="answer-row answer-correct">
+                    ✅ Correct Answer: {{ item.correct_answer }}
+                </div>
+            {% endif %}
+        {% else %}
+            <!-- Descriptive result -->
+            <div class="written-answer">
+                <strong>Your Answer:</strong><br/>
+                {{ item.descriptive_answer }}
+            </div>
+            <div class="answer-row answer-pending">
+                ⏳ This answer is pending teacher review.
+                Marks will be awarded after review.
+            </div>
+        {% endif %}
+
+    </div>
+    {% endfor %}
+
+</div>
+
+</body>
+</html>
