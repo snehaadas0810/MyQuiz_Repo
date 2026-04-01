@@ -1,4 +1,4 @@
-name: 🚀 Deploy Django App to EC2
+name: 🚀 Django CI/CD Pipeline
 
 on:
   push:
@@ -6,44 +6,87 @@ on:
       - main
 
 jobs:
-  deploy:
+
+  # ==============================
+  # 🔍 JOB 1: Code Quality & Security
+  # ==============================
+  checks:
     runs-on: ubuntu-latest
 
     steps:
-      - name: 📥 Checkout code
-        uses: actions/checkout@v3
+      - name: 📥 Checkout Code
+        uses: actions/checkout@v4
+
+      - name: 🐍 Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'   # ✅ stable for Django
+
+      - name: 📦 Install Dependencies
+        run: |
+          pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install flake8 pylint bandit pip-audit
+
+      - name: 🧹 Run Flake8
+        run: flake8 .
+
+      - name: 🧠 Run Pylint
+        run: pylint online_voting_system || true
+
+      - name: 🔐 Run Bandit (Security Scan)
+        run: bandit -r . -ll
+
+      - name: 🔎 Run pip-audit (Dependency Scan)
+        run: pip-audit
+
+
+  # ==============================
+  # 🚀 JOB 2: Deployment
+  # ==============================
+  deploy:
+    needs: checks   # ✅ deploy only if checks pass
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📥 Checkout Code
+        uses: actions/checkout@v4
 
       - name: 🔐 Setup SSH
-        uses: webfactory/ssh-agent@v0.7.0
+        uses: webfactory/ssh-agent@v0.9.0
         with:
-          ssh-private-key: ${{ secrets.ID_RSA }}
+          ssh-private-key: ${{ secrets.ID_RSA }}   # ✅ keep your original secret
 
       - name: 🚀 Deploy to EC2
         run: |
           ssh -o StrictHostKeyChecking=no ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'EOF'
-            
-            echo "🚀 Connected to EC2"
 
-            cd ~/MyQuiz_Repo
+          echo "🚀 Connected to EC2"
 
-            echo "📥 Pulling latest code..."
-            git pull origin main
+          cd ~/MyQuiz_Repo   # ✅ your original project path
 
-            echo "🐍 Activating virtual environment..."
-            source venv/bin/activate
+          echo "📥 Pulling latest code..."
+          git pull origin main
 
-            echo "📦 Installing dependencies..."
-            pip install -r requirements.txt
+          echo "🐍 Activating virtual environment..."
+          source venv/bin/activate
 
-            echo "⚙️ Running migrations..."
-            python manage.py migrate
+          echo "📦 Installing dependencies..."
+          pip install -r requirements.txt
 
-            echo "📁 Collecting static files..."
-            python manage.py collectstatic --noinput
+          echo "⚙️ Running migrations..."
+          cd online_voting_system
+          python manage.py migrate
 
-            echo "🔄 Restarting Gunicorn..."
-            sudo systemctl restart gunicorn
+          echo "📁 Collecting static files..."
+          python manage.py collectstatic --noinput
 
-            echo "✅ Deployment Successful!"
-          
+          echo "🔄 Restarting Gunicorn..."
+          sudo systemctl restart gunicorn
+
+          echo "🌐 Restarting Nginx..."
+          sudo systemctl restart nginx
+
+          echo "✅ Deployment Successful!"
+
           EOF
