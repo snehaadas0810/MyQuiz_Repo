@@ -5,6 +5,7 @@ from questions.models import Question
 
 User = settings.AUTH_USER_MODEL
 
+
 class Result(models.Model):
     student = models.ForeignKey(User, on_delete=models.CASCADE)
     quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE)
@@ -17,6 +18,7 @@ class Result(models.Model):
 
     def __str__(self):
         return f"{self.student} - {self.quiz}"
+
 
 class StudentAnswer(models.Model):
     result = models.ForeignKey(Result, on_delete=models.CASCADE)

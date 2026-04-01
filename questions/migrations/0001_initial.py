@@ -9,21 +9,34 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('subjects', '0001_initial'),
+        ("subjects", "0001_initial"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Question',
+            name="Question",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('question_text', models.TextField()),
-                ('option_a', models.CharField(max_length=200)),
-                ('option_b', models.CharField(max_length=200)),
-                ('option_c', models.CharField(max_length=200)),
-                ('option_d', models.CharField(max_length=200)),
-                ('correct_answer', models.CharField(max_length=1)),
-                ('quiz', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='subjects.quiz')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("question_text", models.TextField()),
+                ("option_a", models.CharField(max_length=200)),
+                ("option_b", models.CharField(max_length=200)),
+                ("option_c", models.CharField(max_length=200)),
+                ("option_d", models.CharField(max_length=200)),
+                ("correct_answer", models.CharField(max_length=1)),
+                (
+                    "quiz",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE, to="subjects.quiz"
+                    ),
+                ),
             ],
         ),
     ]

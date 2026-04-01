@@ -6,21 +6,21 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('subjects', '0001_initial'),
+        ("subjects", "0001_initial"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='quiz',
-            name='is_active',
+            model_name="quiz",
+            name="is_active",
         ),
         migrations.RemoveField(
-            model_name='subject',
-            name='created_by',
+            model_name="subject",
+            name="created_by",
         ),
         migrations.AlterField(
-            model_name='quiz',
-            name='time_limit',
+            model_name="quiz",
+            name="time_limit",
             field=models.PositiveIntegerField(default=10),
         ),
     ]

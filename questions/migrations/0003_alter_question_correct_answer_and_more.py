@@ -7,44 +7,50 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('questions', '0002_question_marks_question_question_type_and_more'),
-        ('subjects', '0003_quiz_is_active_subject_created_by_alter_quiz_subject'),
+        ("questions", "0002_question_marks_question_question_type_and_more"),
+        ("subjects", "0003_quiz_is_active_subject_created_by_alter_quiz_subject"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='question',
-            name='correct_answer',
+            model_name="question",
+            name="correct_answer",
             field=models.TextField(),
         ),
         migrations.AlterField(
-            model_name='question',
-            name='option_a',
+            model_name="question",
+            name="option_a",
             field=models.CharField(blank=True, max_length=255, null=True),
         ),
         migrations.AlterField(
-            model_name='question',
-            name='option_b',
+            model_name="question",
+            name="option_b",
             field=models.CharField(blank=True, max_length=255, null=True),
         ),
         migrations.AlterField(
-            model_name='question',
-            name='option_c',
+            model_name="question",
+            name="option_c",
             field=models.CharField(blank=True, max_length=255, null=True),
         ),
         migrations.AlterField(
-            model_name='question',
-            name='option_d',
+            model_name="question",
+            name="option_d",
             field=models.CharField(blank=True, max_length=255, null=True),
         ),
         migrations.AlterField(
-            model_name='question',
-            name='question_type',
-            field=models.CharField(choices=[('MCQ', 'MCQ'), ('DESC', 'Descriptive')], max_length=20),
+            model_name="question",
+            name="question_type",
+            field=models.CharField(
+                choices=[("MCQ", "MCQ"), ("DESC", "Descriptive")], max_length=20
+            ),
         ),
         migrations.AlterField(
-            model_name='question',
-            name='quiz',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='questions', to='subjects.quiz'),
+            model_name="question",
+            name="quiz",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="questions",
+                to="subjects.quiz",
+            ),
         ),
     ]

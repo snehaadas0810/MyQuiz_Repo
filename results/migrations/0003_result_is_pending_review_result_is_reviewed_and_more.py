@@ -6,48 +6,48 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('results', '0002_studentanswer'),
+        ("results", "0002_studentanswer"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='result',
-            name='is_pending_review',
+            model_name="result",
+            name="is_pending_review",
             field=models.BooleanField(default=False),
         ),
         migrations.AddField(
-            model_name='result',
-            name='is_reviewed',
+            model_name="result",
+            name="is_reviewed",
             field=models.BooleanField(default=False),
         ),
         migrations.AddField(
-            model_name='studentanswer',
-            name='descriptive_answer',
+            model_name="studentanswer",
+            name="descriptive_answer",
             field=models.TextField(blank=True),
         ),
         migrations.AddField(
-            model_name='studentanswer',
-            name='is_reviewed',
+            model_name="studentanswer",
+            name="is_reviewed",
             field=models.BooleanField(default=False),
         ),
         migrations.AddField(
-            model_name='studentanswer',
-            name='marks_awarded',
+            model_name="studentanswer",
+            name="marks_awarded",
             field=models.IntegerField(default=0),
         ),
         migrations.AddField(
-            model_name='studentanswer',
-            name='teacher_feedback',
+            model_name="studentanswer",
+            name="teacher_feedback",
             field=models.TextField(blank=True),
         ),
         migrations.AlterField(
-            model_name='studentanswer',
-            name='is_correct',
+            model_name="studentanswer",
+            name="is_correct",
             field=models.BooleanField(default=False),
         ),
         migrations.AlterField(
-            model_name='studentanswer',
-            name='selected_answer',
+            model_name="studentanswer",
+            name="selected_answer",
             field=models.CharField(blank=True, max_length=200),
         ),
     ]

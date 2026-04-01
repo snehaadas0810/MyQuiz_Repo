@@ -6,43 +6,47 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('questions', '0001_initial'),
+        ("questions", "0001_initial"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='question',
-            name='marks',
+            model_name="question",
+            name="marks",
             field=models.IntegerField(default=1),
         ),
         migrations.AddField(
-            model_name='question',
-            name='question_type',
-            field=models.CharField(choices=[('mcq', 'Multiple Choice'), ('descriptive', 'Descriptive')], default='mcq', max_length=15),
+            model_name="question",
+            name="question_type",
+            field=models.CharField(
+                choices=[("mcq", "Multiple Choice"), ("descriptive", "Descriptive")],
+                default="mcq",
+                max_length=15,
+            ),
         ),
         migrations.AlterField(
-            model_name='question',
-            name='correct_answer',
+            model_name="question",
+            name="correct_answer",
             field=models.CharField(blank=True, max_length=200),
         ),
         migrations.AlterField(
-            model_name='question',
-            name='option_a',
+            model_name="question",
+            name="option_a",
             field=models.CharField(blank=True, max_length=200),
         ),
         migrations.AlterField(
-            model_name='question',
-            name='option_b',
+            model_name="question",
+            name="option_b",
             field=models.CharField(blank=True, max_length=200),
         ),
         migrations.AlterField(
-            model_name='question',
-            name='option_c',
+            model_name="question",
+            name="option_c",
             field=models.CharField(blank=True, max_length=200),
         ),
         migrations.AlterField(
-            model_name='question',
-            name='option_d',
+            model_name="question",
+            name="option_d",
             field=models.CharField(blank=True, max_length=200),
         ),
     ]
